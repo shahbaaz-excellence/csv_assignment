@@ -1,0 +1,25 @@
+
+
+.download_btn_primary{
+    margin: 10px;
+    width: -webkit-fill-available;
+}
+
+.content{
+    width: 90%;
+    margin: auto;
+}
+.download_btn_success{
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.upload_btn{
+    margin-top: 1rem;
+}
+
+.heading{
+    font-style: italic;
+    font-size: medium;
+    margin-top: 1rem;
+}
