@@ -1,7 +1,5 @@
-import { title } from "process";
 import { put } from "redux-saga/effects";
 import mock from "../Json/mock.json";
-
 import { GetDataSuccess, GetDataError } from "../Redux/actions";
 
 export function* dataListSaga(action) {
@@ -20,8 +18,6 @@ export function* dataListSaga(action) {
                 }
             )
         ))
-
-        // console.log(response, "JSON Response");
 
         if (response) {
             yield put(GetDataSuccess({ response }))
