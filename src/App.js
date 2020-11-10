@@ -1,10 +1,10 @@
 import './App.css';
-import DownloadCSV from "./components/downloadCSV";
+import HomeCSV from "./components/homeCSV";
 
 const App = () => {
   return (
     <>
-      <DownloadCSV/>
+      <HomeCSV />
     </>
   );
 }
