@@ -1,12 +1,4 @@
-.maindiv{
 
-}
-
-.sidebar{
-    width: 20%;
-    float: left;
-    height:100vh
-}
 
 .download_btn_primary{
     margin: 10px;
@@ -14,23 +6,20 @@
 }
 
 .content{
-    width: 80%;
-    float: left;
-    /* border-left: 1px solid black; */
+    width: 90%;
+    margin: auto;
 }
 .download_btn_success{
     margin-top: 2rem;
-    margin-left: 3rem;
-}
-
-.upload_div{
-    padding: 1rem;
+    width: 100%;
 }
 
 .upload_btn{
-    padding: 1rem;
+    margin-top: 1rem;
 }
 
 .heading{
     font-style: italic;
+    font-size: medium;
+    margin-top: 1rem;
 }

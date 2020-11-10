@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./downloadCSV.css";
 import { Navbar, Nav, Button, Jumbotron } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { GetDataRequest } from "../Redux/actions";
+import { GetDataRequest, SendDataRequest } from "../Redux/actions";
 import { CSVLink } from "react-csv";
 import { CSVReader } from "react-papaparse";
 
 const DownloadCSV = () => {
   const dispatch = useDispatch();
   const [list, setlist] = useState([]);
-  const [pagetoggle, setpagetoggle] = useState(true);
   const [itemList, setitemList] = useState([]);
   const [emptyCogs, setemptyCogs] = useState([]);
   const [filledCogs, setfilledCogs] = useState([]);
@@ -72,6 +71,13 @@ const DownloadCSV = () => {
       }
     });
     await setitemList(newData);
+
+    let cogUpdateValue = {
+      id: itemID,
+      cog: cogValue,
+    };
+
+    await dispatch(SendDataRequest(cogUpdateValue));
     setcogValue("");
     e.target.reset();
   };
@@ -94,7 +100,10 @@ const DownloadCSV = () => {
     );
   }, [itemList]);
 
-  
+
+
+
+
 
   return (
     <>
@@ -104,25 +113,8 @@ const DownloadCSV = () => {
       </Navbar>
 
       <div className="maindiv">
-        <div className="sidebar">
-          <Button
-            className="download_btn_primary"
-            onClick={() => setpagetoggle(true)}
-            variant="primary"
-          >
-            Download CSV File
-          </Button>
-          <Button
-            className="download_btn_primary"
-            onClick={() => setpagetoggle(false)}
-            variant="primary"
-          >
-            Upload CSV File
-          </Button>
-        </div>
-
         <div className="content">
-          {pagetoggle ? (
+          {
             list && list.length > 0 ? (
               <CSVLink data={list}>
                 <Button className="download_btn_success" variant="success">
@@ -130,71 +122,80 @@ const DownloadCSV = () => {
                 </Button>
               </CSVLink>
             ) : null
-          ) : (
-            <div className="upload_div">
-              <div className="upload_btn">
-                <CSVReader
-                  onDrop={handleOnDrop}
-                  onError={handleOnError}
-                  noDrag
-                  addRemoveButton
-                >
-                  <span>Click to upload.</span>
-                </CSVReader>
-              </div>
-              <div>
-                <h2 className="heading">
-                  Non-Empty Cogs : {filledCogs.length}
-                </h2>
+          }
 
-                {filledCogs.map((item, index) => {
-                  return (
-                    <Jumbotron>
-                      <div key={index}>
-                        <div>
-                          <p>{item.title}</p>
-                          <p>Sku: {item.sku} </p>
-                          <p>Price : {item.price}</p>
-                        </div>
-                        <div>
-                          <p>COGS : {item.cogs}</p>
-                        </div>
-                      </div>
-                    </Jumbotron>
-                  );
-                })}
-              </div>
+          {
+            itemList && itemList.length > 0 ? (
+              <CSVLink data={itemList}>
+                <Button className="download_btn_success" variant="primary">
+                  Updated CSV File
+                </Button>
+              </CSVLink>
+            ) : null
+          }
 
-              <div>
-                <h2 className="heading">Non-Empty Cogs : {emptyCogs.length}</h2>
-
-                {emptyCogs.map((item, index) => {
-                  return (
-                    <Jumbotron>
-                      <div key={index}>
-                        <div>
-                          <p>{item.title}</p>
-                          <p>Sku: {item.sku} </p>
-                          <p>Price : {item.price}</p>
-                        </div>
-                        <div>
-                          <p>
-                            COGS :{" "}
-                            <form onSubmit={(e) => submitCog(e, item.id)}>
-                              <input
-                                type="text"
-                                onChange={(e) => setcogValue(e.target.value)}
-                              />
-                            </form>
-                          </p>
-                        </div>
-                      </div>
-                    </Jumbotron>
-                  );
-                })}
-              </div>
+          <div className="upload_div">
+            <div className="upload_btn">
+              <CSVReader
+                onDrop={handleOnDrop}
+                onError={handleOnError}
+                addRemoveButton
+              >
+                <span>Click or Drag to upload.</span>
+              </CSVReader>
             </div>
-          )}
+            <div>
+              <h2 className="heading">
+                Non-Empty Cogs : {filledCogs.length}
+              </h2>
+
+              {filledCogs.map((item, index) => {
+                return (
+                  <Jumbotron>
+                    <div key={index}>
+                      <div>
+                        <p>{item.title}</p>
+                        <p>Sku: {item.sku} </p>
+                        <p>Price : {item.price}</p>
+                      </div>
+                      <div>
+                        <p>COGS : {item.cogs}</p>
+                      </div>
+                    </div>
+                  </Jumbotron>
+                );
+              })}
+            </div>
+
+            <div>
+              <h2 className="heading">Empty Cogs : {emptyCogs.length}</h2>
+
+              {emptyCogs.map((item, index) => {
+                return (
+                  <Jumbotron>
+                    <div key={index}>
+                      <div>
+                        <p>{item.title}</p>
+                        <p>Sku: {item.sku} </p>
+                        <p>Price : {item.price}</p>
+                      </div>
+                      <div>
+                        <p>
+                          COGS :{" "}
+                          <form onSubmit={(e) => submitCog(e, item.id)}>
+                            <input
+                              type="text"
+                              onChange={(e) => setcogValue(e.target.value)}
+                            />
+                          </form>
+                        </p>
+                      </div>
+                    </div>
+                  </Jumbotron>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </>
